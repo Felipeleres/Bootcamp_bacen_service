@@ -19,4 +19,5 @@ public class Chave {
     private String chave;
     @Column
     private Boolean ativa;
+
 }
