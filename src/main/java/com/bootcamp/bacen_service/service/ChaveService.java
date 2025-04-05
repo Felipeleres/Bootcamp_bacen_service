@@ -9,6 +9,8 @@ import com.bootcamp.bacen_service.repository.ChaveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class ChaveService {
@@ -44,4 +46,23 @@ public class ChaveService {
                 .ativa(chave.getAtiva())
                 .build();
     }
+
+    public void deletarChave(String chavePix){
+        Chave chave = chaveRepository.findByChave(chavePix).orElseThrow(()-> new ChaveNaoLocalizadaException(String.format("A chave: %s não existe no sistema.",chavePix)));
+        chaveRepository.delete(chave);
+    }
+
+    public ChaveResponseDTO updateChave(String chaveAtual, ChaveRequestDTO chaveRequestDTO){
+        Chave chavePix = chaveRepository.findByChave(chaveAtual).orElseThrow(()-> new ChaveNaoLocalizadaException(String.format("A chave não existe no sistema.")));
+        chavePix.setChave(chaveRequestDTO.getChave());
+        chaveRepository.save(chavePix);
+        return ChaveResponseDTO.builder()
+                .chave(chavePix.getChave())
+                .ativa(chavePix.getAtiva())
+                .build();
+    }
+
+
+
+
 }
